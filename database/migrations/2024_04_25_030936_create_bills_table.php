@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('bills', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('booking_id');
+            $table->decimal('total_price');
+            $table->dateTime('date');
             $table->string('create_by');
             $table->string('update_by');
             $table->string('delete_by');
