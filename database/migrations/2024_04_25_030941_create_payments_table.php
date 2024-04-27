@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('booking_id');
             $table->string('payment_method');
+            $table->dateTime('date');
             $table->string('create_by');
             $table->string('update_by');
             $table->string('delete_by');
