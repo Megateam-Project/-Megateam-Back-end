@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Booking extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
     protected $table = 'bookings';
     public function user(){
         return $this->belongsTo(User::class);
@@ -22,4 +22,9 @@ class Booking extends Model
     public function bill(){
         return $this->hasOne(Bill::class);
     }
+    public function getAllBooking(){
+        $bookings = Booking::with('user', 'room') -> get();
+        return $bookings;
+    }
+    
 }
