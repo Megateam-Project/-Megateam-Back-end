@@ -47,8 +47,19 @@ class BookingController extends Controller
     public function store(Request $request)
     {
         $dataInsert = [
-            
-        ]
+            'user_id' => $request->input('user_id'),
+            'room_id' => $request->input('room_id'),
+            'check_in_date' => $request->input('check_in_date'),
+            'check_out_date' => $request->input('check_out_date'),
+            'create_by' => $request->input('create_by'),
+        ];
+        $insertBooking = Booking::create($dataInsert);
+        if (!$insertBooking){
+            return response()->json(['message'=>'error'],404);
+        }
+        return response()->json([
+            'message'=>'success',
+            'data' => $insertBooking],200);
     }
 
     /**
