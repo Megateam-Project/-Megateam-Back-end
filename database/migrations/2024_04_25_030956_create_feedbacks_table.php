@@ -16,10 +16,10 @@ return new class extends Migration
             $table->unsignedBigInteger('room_id');
             $table->unsignedBigInteger('user_id');
             $table->string('content');
-            $table->string('create_by');
-            $table->string('update_by');
-            $table->string('delete_by');
-            $table->dateTime('delete_at');
+            $table->string('create_by')->nullable();
+            $table->string('update_by')->nullable();
+            $table->string('delete_by')->nullable();
+            $table->softDeletes();
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('room_id')->references('id')->on('rooms');

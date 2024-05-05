@@ -16,10 +16,10 @@ return new class extends Migration
             $table->unsignedBigInteger('booking_id');
             $table->decimal('total_price');
             $table->dateTime('date');
-            $table->string('create_by');
-            $table->string('update_by');
-            $table->string('delete_by');
-            $table->dateTime('delete_at');
+            $table->string('create_by')->nullable();
+            $table->string('update_by')->nullable();
+            $table->string('delete_by')->nullable();
+            $table->softDeletes();
             $table->timestamps();
             $table->foreign('booking_id')->references('id')->on('bookings');
         });

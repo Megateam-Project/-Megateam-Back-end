@@ -29,6 +29,241 @@
                         "bearer": []
                     }
                 ]
+            },
+            "post": {
+                "tags": [
+                    "Booking"
+                ],
+                "summary": "Create a new booking",
+                "description": "Create a new booking",
+                "operationId": "e33fa5a6507581f9b1e0d710a9a130d1",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "user_id",
+                                    "room_id",
+                                    "check_in_date",
+                                    "check_out_date",
+                                    "create_by"
+                                ],
+                                "properties": {
+                                    "user_id": {
+                                        "type": "integer",
+                                        "example": "1"
+                                    },
+                                    "room_id": {
+                                        "type": "integer",
+                                        "example": "1"
+                                    },
+                                    "check_in_date": {
+                                        "type": "string",
+                                        "example": "2024-05-02 08:47:14"
+                                    },
+                                    "check_out_date": {
+                                        "type": "string",
+                                        "example": "2024-05-04 08:47:14"
+                                    },
+                                    "create_by": {
+                                        "type": "string",
+                                        "example": "Admin"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Create New Booking"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/bookings/{id}": {
+            "get": {
+                "tags": [
+                    "Booking"
+                ],
+                "summary": "Get a specific booking",
+                "operationId": "ccb98678c3ca3c9e74460dbddc427ab0",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Booking ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Show Booking Detail"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Booking"
+                ],
+                "summary": "Update a specific booking",
+                "operationId": "fb300db4391c22f2232e2814d49641c7",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Booking ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "user_id": {
+                                        "type": "integer",
+                                        "example": "1"
+                                    },
+                                    "room_id": {
+                                        "type": "integer",
+                                        "example": "1"
+                                    },
+                                    "check_in_date": {
+                                        "type": "string",
+                                        "example": "2024-05-02 08:47:14"
+                                    },
+                                    "check_out_date": {
+                                        "type": "string",
+                                        "example": "2024-05-04 08:47:14"
+                                    },
+                                    "update_by": {
+                                        "type": "string",
+                                        "example": "Admin"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Update Booking"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Booking"
+                ],
+                "summary": "Delete a specific booking",
+                "operationId": "9f51d8752d2471c30540b89c13e933df",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Booking ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Delete booking"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/bookings/{id}/restore": {
+            "patch": {
+                "tags": [
+                    "Booking"
+                ],
+                "summary": "Restore a specific booking",
+                "operationId": "2e4b515aff0107d8d06dabc776ed8da8",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Booking ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Booking restored successfully"
+                    },
+                    "400": {
+                        "description": "Booking is not deleted, cannot be restored"
+                    },
+                    "404": {
+                        "description": "Booking not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         }
     }
