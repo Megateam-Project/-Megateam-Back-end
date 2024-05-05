@@ -19,10 +19,10 @@ return new class extends Migration
             $table->string('avatar');
             $table->string('password');
             $table->string('role');
-            $table->string('create_by');
-            $table->string('update_by');
-            $table->string('delete_by');
-            $table->dateTime('delete_at');
+            $table->string('create_by')->nullable();
+            $table->string('update_by')->nullable();
+            $table->string('delete_by')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }
