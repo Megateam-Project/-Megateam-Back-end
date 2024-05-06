@@ -18,7 +18,7 @@ class UserController extends Controller
      *     tags={"User"},
      *     summary="Get User List",
      *     description="Get User List as Array",
-     *     operationId="indexV2",
+     *     operationId="indexv3",
      *     security={{"bearer":{}}},
      *     @OA\Response(response=200,description="Get User List as Array"),
      *     @OA\Response(response=400, description="Bad request"),

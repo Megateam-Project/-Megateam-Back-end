@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
             BillSeeder::class,
             FavoriteSeeder::class,
             PaymentSeeder::class,
-            // FeedbackSeeder::class,
+            FeedbackSeeder::class,
         ]);
     }
 }

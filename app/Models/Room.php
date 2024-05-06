@@ -8,8 +8,24 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Room extends Model
 {
-    use HasFactory;
-    protected $table = 'rooms';
+    use HasFactory, SoftDeletes;
+
+    protected $fillable = [
+        'name',
+        'type',
+        'price',
+        'description',
+        'image',
+        'convenient',
+        'number',
+        'discount',
+        'create_by',
+        'update_by',
+        'delete_by'
+    ];
+
+    protected $dates = ['deleted_at'];
+
     public function favorite(){
         return $this->hasMany(Favorite::class);
     }
@@ -20,3 +36,5 @@ class Room extends Model
         return $this->hasMany(Feedback::class);
     }
 }
+
+

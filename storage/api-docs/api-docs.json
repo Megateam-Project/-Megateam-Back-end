@@ -266,6 +266,379 @@
                 ]
             }
         },
+        "/api/rooms": {
+            "get": {
+                "tags": [
+                    "Room"
+                ],
+                "summary": "Get Room List",
+                "description": "Get Room List as Array",
+                "operationId": "indexV2",
+                "responses": {
+                    "200": {
+                        "description": "Get Room List as Array"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Room"
+                ],
+                "summary": "Create a new Room",
+                "operationId": "store",
+                "requestBody": {
+                    "description": "Room data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "type",
+                                    "price",
+                                    "description",
+                                    "image",
+                                    "convenient",
+                                    "number",
+                                    "discount",
+                                    "created_by"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "description": "Name of the room",
+                                        "type": "string",
+                                        "maxLength": 50,
+                                        "example": "Deluxe Room"
+                                    },
+                                    "type": {
+                                        "description": "Type of the room",
+                                        "type": "string",
+                                        "maxLength": 50,
+                                        "example": "Double"
+                                    },
+                                    "price": {
+                                        "description": "Price of the room",
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": "150.00"
+                                    },
+                                    "description": {
+                                        "description": "Description of the room",
+                                        "type": "string",
+                                        "maxLength": 500,
+                                        "nullable": true
+                                    },
+                                    "image": {
+                                        "description": "Image URL of the room",
+                                        "type": "string",
+                                        "maxLength": 15000,
+                                        "nullable": true
+                                    },
+                                    "convenient": {
+                                        "description": "Convenient features of the room",
+                                        "type": "string",
+                                        "maxLength": 200,
+                                        "nullable": true
+                                    },
+                                    "number": {
+                                        "description": "Number of available rooms",
+                                        "type": "integer",
+                                        "example": "10"
+                                    },
+                                    "discount": {
+                                        "description": "Discount percentage for the room",
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": "10.00"
+                                    },
+                                    "create_by": {
+                                        "description": "Name of the creator",
+                                        "type": "string",
+                                        "maxLength": 50,
+                                        "example": "Admin"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Room created successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/rooms/{id}": {
+            "get": {
+                "tags": [
+                    "Room"
+                ],
+                "summary": "Get a specific Room by ID",
+                "operationId": "show",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Room ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Room found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "description": "Room ID",
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "name": {
+                                            "description": "Name of the room",
+                                            "type": "string",
+                                            "maxLength": 50,
+                                            "example": "Deluxe Room"
+                                        },
+                                        "type": {
+                                            "description": "Type of the room",
+                                            "type": "string",
+                                            "maxLength": 50,
+                                            "example": "Double"
+                                        },
+                                        "price": {
+                                            "description": "Price of the room",
+                                            "type": "number",
+                                            "format": "float",
+                                            "example": 150
+                                        },
+                                        "description": {
+                                            "description": "Description of the room",
+                                            "type": "string",
+                                            "maxLength": 500,
+                                            "nullable": true
+                                        },
+                                        "image": {
+                                            "description": "Image URL of the room",
+                                            "type": "string",
+                                            "maxLength": 15000,
+                                            "nullable": true
+                                        },
+                                        "convenient": {
+                                            "description": "Convenient features of the room",
+                                            "type": "string",
+                                            "maxLength": 200,
+                                            "nullable": true
+                                        },
+                                        "number": {
+                                            "description": "Number of available rooms",
+                                            "type": "integer",
+                                            "example": 10
+                                        },
+                                        "discount": {
+                                            "description": "Discount percentage for the room",
+                                            "type": "number",
+                                            "format": "float",
+                                            "example": 10
+                                        },
+                                        "created_at": {
+                                            "description": "Room creation date",
+                                            "type": "string",
+                                            "format": "date-time"
+                                        },
+                                        "updated_at": {
+                                            "description": "Room last update date",
+                                            "type": "string",
+                                            "format": "date-time"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Room not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Room"
+                ],
+                "summary": "Update a specific Room",
+                "operationId": "update",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Room ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Room data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "type",
+                                    "price",
+                                    "description",
+                                    "image",
+                                    "convenient",
+                                    "number",
+                                    "discount",
+                                    "update_by"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Deluxe Room"
+                                    },
+                                    "type": {
+                                        "type": "string",
+                                        "example": "Double"
+                                    },
+                                    "price": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": "150.00"
+                                    },
+                                    "description": {
+                                        "description": "Description of the room",
+                                        "type": "string",
+                                        "maxLength": 500,
+                                        "nullable": true
+                                    },
+                                    "image": {
+                                        "description": "Image URL of the room",
+                                        "type": "string",
+                                        "maxLength": 15000,
+                                        "nullable": true
+                                    },
+                                    "convenient": {
+                                        "description": "Convenient features of the room",
+                                        "type": "string",
+                                        "maxLength": 200,
+                                        "nullable": true
+                                    },
+                                    "number": {
+                                        "description": "Number of available rooms",
+                                        "type": "integer",
+                                        "example": "10"
+                                    },
+                                    "discount": {
+                                        "description": "Discount percentage for the room",
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": "10.00"
+                                    },
+                                    "update_by": {
+                                        "description": "Name of the updater",
+                                        "type": "string",
+                                        "maxLength": 50,
+                                        "example": "Admin"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Room updated successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Room"
+                ],
+                "summary": "Delete a specific Room",
+                "operationId": "61024891be80949c0aaa6e4536381225",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Room ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Room deleted successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
         "/api/users": {
             "get": {
                 "tags": [
@@ -273,7 +646,7 @@
                 ],
                 "summary": "Get User List",
                 "description": "Get User List as Array",
-                "operationId": "indexV2",
+                "operationId": "indexv3",
                 "responses": {
                     "200": {
                         "description": "Get User List as Array"
