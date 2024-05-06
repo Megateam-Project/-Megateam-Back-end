@@ -5,9 +5,21 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 class User extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
     protected $table = 'users';
-
+    public $fillable = [
+        'name',
+        'email',
+        'phone',
+        'avatar',
+        'role',
+        'password',
+        'create_by',
+        'update_by',
+        'delete_by',
+        'create_at',
+        'update_at'
+    ];
     public function favorite(){
         return $this->hasMany(Favorite::class);
     }
