@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -22,7 +23,7 @@ class AuthController extends Controller
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'phone' => ['required', 'string', 'min:8'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'avatar' => ['required', 'string', 'min:8'],
+            'avatar' => ['required', 'string'],
         ]);
 
         if ($validator->fails()) {
@@ -57,7 +58,6 @@ class AuthController extends Controller
         }
 
         $credentials = $request->only('email', 'password');
-
         if ($token = JWTAuth::attempt($credentials)) {
             return response()->json([
                 'response' => 'success',
@@ -72,6 +72,18 @@ class AuthController extends Controller
             'message' => 'invalid_email_or_password',
         ], 400);
     }
+
+    // public function login(Request $request)
+    // {
+    //     $credentials = request(['email', 'password']);
+
+    //     if (! $token = auth()->attempt($credentials)) {
+    //         return response()->json(['error' => 'Unauthorized'], 401);
+    //     }
+
+    //     return $this->respondWithToken($token);
+    // }
+
 
     public function logout()
     {

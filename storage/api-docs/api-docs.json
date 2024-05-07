@@ -29,6 +29,857 @@
                         "bearer": []
                     }
                 ]
+            },
+            "post": {
+                "tags": [
+                    "Booking"
+                ],
+                "summary": "Create a new booking",
+                "description": "Create a new booking",
+                "operationId": "e33fa5a6507581f9b1e0d710a9a130d1",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "user_id",
+                                    "room_id",
+                                    "check_in_date",
+                                    "check_out_date",
+                                    "create_by"
+                                ],
+                                "properties": {
+                                    "user_id": {
+                                        "type": "integer",
+                                        "example": "1"
+                                    },
+                                    "room_id": {
+                                        "type": "integer",
+                                        "example": "1"
+                                    },
+                                    "check_in_date": {
+                                        "type": "string",
+                                        "example": "2024-05-02 08:47:14"
+                                    },
+                                    "check_out_date": {
+                                        "type": "string",
+                                        "example": "2024-05-04 08:47:14"
+                                    },
+                                    "create_by": {
+                                        "type": "string",
+                                        "example": "Admin"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Create New Booking"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/bookings/{id}": {
+            "get": {
+                "tags": [
+                    "Booking"
+                ],
+                "summary": "Get a specific booking",
+                "operationId": "ccb98678c3ca3c9e74460dbddc427ab0",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Booking ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Show Booking Detail"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Booking"
+                ],
+                "summary": "Update a specific booking",
+                "operationId": "fb300db4391c22f2232e2814d49641c7",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Booking ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "user_id": {
+                                        "type": "integer",
+                                        "example": "1"
+                                    },
+                                    "room_id": {
+                                        "type": "integer",
+                                        "example": "1"
+                                    },
+                                    "check_in_date": {
+                                        "type": "string",
+                                        "example": "2024-05-02 08:47:14"
+                                    },
+                                    "check_out_date": {
+                                        "type": "string",
+                                        "example": "2024-05-04 08:47:14"
+                                    },
+                                    "update_by": {
+                                        "type": "string",
+                                        "example": "Admin"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Update Booking"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Booking"
+                ],
+                "summary": "Delete a specific booking",
+                "operationId": "9f51d8752d2471c30540b89c13e933df",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Booking ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Delete booking"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/bookings/{id}/restore": {
+            "patch": {
+                "tags": [
+                    "Booking"
+                ],
+                "summary": "Restore a specific booking",
+                "operationId": "2e4b515aff0107d8d06dabc776ed8da8",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Booking ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Booking restored successfully"
+                    },
+                    "400": {
+                        "description": "Booking is not deleted, cannot be restored"
+                    },
+                    "404": {
+                        "description": "Booking not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/rooms": {
+            "get": {
+                "tags": [
+                    "Room"
+                ],
+                "summary": "Get Room List",
+                "description": "Get Room List as Array",
+                "operationId": "indexV2",
+                "responses": {
+                    "200": {
+                        "description": "Get Room List as Array"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Room"
+                ],
+                "summary": "Create a new Room",
+                "operationId": "store",
+                "requestBody": {
+                    "description": "Room data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "type",
+                                    "price",
+                                    "description",
+                                    "image",
+                                    "convenient",
+                                    "number",
+                                    "discount",
+                                    "created_by"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "description": "Name of the room",
+                                        "type": "string",
+                                        "maxLength": 50,
+                                        "example": "Deluxe Room"
+                                    },
+                                    "type": {
+                                        "description": "Type of the room",
+                                        "type": "string",
+                                        "maxLength": 50,
+                                        "example": "Double"
+                                    },
+                                    "price": {
+                                        "description": "Price of the room",
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": "150.00"
+                                    },
+                                    "description": {
+                                        "description": "Description of the room",
+                                        "type": "string",
+                                        "maxLength": 500,
+                                        "nullable": true
+                                    },
+                                    "image": {
+                                        "description": "Image URL of the room",
+                                        "type": "string",
+                                        "maxLength": 15000,
+                                        "nullable": true
+                                    },
+                                    "convenient": {
+                                        "description": "Convenient features of the room",
+                                        "type": "string",
+                                        "maxLength": 200,
+                                        "nullable": true
+                                    },
+                                    "number": {
+                                        "description": "Number of available rooms",
+                                        "type": "integer",
+                                        "example": "10"
+                                    },
+                                    "discount": {
+                                        "description": "Discount percentage for the room",
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": "10.00"
+                                    },
+                                    "create_by": {
+                                        "description": "Name of the creator",
+                                        "type": "string",
+                                        "maxLength": 50,
+                                        "example": "Admin"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Room created successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/rooms/{id}": {
+            "get": {
+                "tags": [
+                    "Room"
+                ],
+                "summary": "Get a specific Room by ID",
+                "operationId": "show",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Room ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Room found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "description": "Room ID",
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "name": {
+                                            "description": "Name of the room",
+                                            "type": "string",
+                                            "maxLength": 50,
+                                            "example": "Deluxe Room"
+                                        },
+                                        "type": {
+                                            "description": "Type of the room",
+                                            "type": "string",
+                                            "maxLength": 50,
+                                            "example": "Double"
+                                        },
+                                        "price": {
+                                            "description": "Price of the room",
+                                            "type": "number",
+                                            "format": "float",
+                                            "example": 150
+                                        },
+                                        "description": {
+                                            "description": "Description of the room",
+                                            "type": "string",
+                                            "maxLength": 500,
+                                            "nullable": true
+                                        },
+                                        "image": {
+                                            "description": "Image URL of the room",
+                                            "type": "string",
+                                            "maxLength": 15000,
+                                            "nullable": true
+                                        },
+                                        "convenient": {
+                                            "description": "Convenient features of the room",
+                                            "type": "string",
+                                            "maxLength": 200,
+                                            "nullable": true
+                                        },
+                                        "number": {
+                                            "description": "Number of available rooms",
+                                            "type": "integer",
+                                            "example": 10
+                                        },
+                                        "discount": {
+                                            "description": "Discount percentage for the room",
+                                            "type": "number",
+                                            "format": "float",
+                                            "example": 10
+                                        },
+                                        "created_at": {
+                                            "description": "Room creation date",
+                                            "type": "string",
+                                            "format": "date-time"
+                                        },
+                                        "updated_at": {
+                                            "description": "Room last update date",
+                                            "type": "string",
+                                            "format": "date-time"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Room not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Room"
+                ],
+                "summary": "Update a specific Room",
+                "operationId": "update",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Room ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Room data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "type",
+                                    "price",
+                                    "description",
+                                    "image",
+                                    "convenient",
+                                    "number",
+                                    "discount",
+                                    "update_by"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Deluxe Room"
+                                    },
+                                    "type": {
+                                        "type": "string",
+                                        "example": "Double"
+                                    },
+                                    "price": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": "150.00"
+                                    },
+                                    "description": {
+                                        "description": "Description of the room",
+                                        "type": "string",
+                                        "maxLength": 500,
+                                        "nullable": true
+                                    },
+                                    "image": {
+                                        "description": "Image URL of the room",
+                                        "type": "string",
+                                        "maxLength": 15000,
+                                        "nullable": true
+                                    },
+                                    "convenient": {
+                                        "description": "Convenient features of the room",
+                                        "type": "string",
+                                        "maxLength": 200,
+                                        "nullable": true
+                                    },
+                                    "number": {
+                                        "description": "Number of available rooms",
+                                        "type": "integer",
+                                        "example": "10"
+                                    },
+                                    "discount": {
+                                        "description": "Discount percentage for the room",
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": "10.00"
+                                    },
+                                    "update_by": {
+                                        "description": "Name of the updater",
+                                        "type": "string",
+                                        "maxLength": 50,
+                                        "example": "Admin"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Room updated successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Room"
+                ],
+                "summary": "Delete a specific Room",
+                "operationId": "61024891be80949c0aaa6e4536381225",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Room ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Room deleted successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/users": {
+            "get": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Get User List",
+                "description": "Get User List as Array",
+                "operationId": "indexv3",
+                "responses": {
+                    "200": {
+                        "description": "Get User List as Array"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Create a new user",
+                "description": "Create a new user",
+                "operationId": "592819a0265360b2014512d6dbfaf0e7",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "email",
+                                    "phone",
+                                    "avatar",
+                                    "password",
+                                    "role",
+                                    "create_by"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Khanh Nhi"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "example": "nhi@gmail.com"
+                                    },
+                                    "phone": {
+                                        "type": "string",
+                                        "example": "0374943992"
+                                    },
+                                    "avatar": {
+                                        "type": "string",
+                                        "example": "https://s.net.vn/a5IG"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "12345678"
+                                    },
+                                    "role": {
+                                        "type": "string",
+                                        "example": "admin/user"
+                                    },
+                                    "create_by": {
+                                        "type": "string",
+                                        "example": "Admin"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Create New User"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/users/{id}": {
+            "get": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Get a specific user",
+                "operationId": "36a33ff774d5cba33c039dec2c3e0287",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "User ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Show User Detail"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Update a specific user",
+                "operationId": "b9091397c8b25f12c6adb74be6ce3a5a",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "User ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Khanh Nhi"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "example": "nhi@gmail.com"
+                                    },
+                                    "phone": {
+                                        "type": "string",
+                                        "example": "0374943992"
+                                    },
+                                    "avatar": {
+                                        "type": "string",
+                                        "example": "https://s.net.vn/a5IG"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "12345678"
+                                    },
+                                    "role": {
+                                        "type": "string",
+                                        "example": "admin/user"
+                                    },
+                                    "update_by": {
+                                        "type": "string",
+                                        "example": "Admin"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Update User"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Delete a specific user",
+                "operationId": "fa56cffde745d3f152f95cbacd936c0b",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "User ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Delete user"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         }
     }
