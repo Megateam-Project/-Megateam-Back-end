@@ -43,6 +43,8 @@ Route::namespace('Api')->group(function(){
     Route::post('signup', [AuthController::class,'signup']);
 
     Route::post('logout', [AuthController::class,'logout']);
+    Route::post('profile', [AuthController::class,'profile']);
+
     Route::get('user', 'AuthController@user');
 
 });

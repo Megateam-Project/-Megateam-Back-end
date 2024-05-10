@@ -33,10 +33,11 @@ class User extends Authenticatable implements JWTSubject
     public function feedback(){
         return $this->hasMany(Feedback::class);
     }
-    public function getJWTIdentifier()
-    {
-        return $this->getKey();
-    }
+public function getJWTIdentifier()
+{
+    return $this->getKey();
+}
+
     public function getJWTCustomClaims()
     {
         return [];
