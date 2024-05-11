@@ -16,7 +16,7 @@ class AuthController extends Controller
     {
         Auth::shouldUse('api');
     }
-        /**
+    /**
      * @OA\POST(
      *     path="/api/signup",
      *     tags={"Authentication"},
@@ -114,7 +114,23 @@ class AuthController extends Controller
         ], 400);
     }
 
-
+    /**
+ * @OA\POST(
+ *     path="/api/logout",
+ *     tags={"Authentication"},
+ *     summary="Logout",
+ *     description="Logout",
+ *     @OA\RequestBody(
+ *         required=true,
+ *         @OA\JsonContent(
+ *             @OA\Property(property="token", type="string", example="your_access_token_here")
+ *         )
+ *     ),
+ *     @OA\Response(response=200, description="Logout"),
+ *     @OA\Response(response=400, description="Bad request"),
+ *     @OA\Response(response=404, description="Resource Not Found"),
+ * )
+ */
 
     public function logout()
     {
