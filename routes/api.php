@@ -21,7 +21,6 @@ use App\Http\Controllers\RoomController;
 Route::apiResource('bookings', BookingController::class);
 Route::patch('bookings/{id}/restore', [BookingController::class, 'restore']);
 Route::resource('rooms', RoomController::class);
-
 Route::resource('users', UserController::class);
 // Route::prefix('users')->group(function () {
 //     Route::get('/', [UserController::class, 'index']);
