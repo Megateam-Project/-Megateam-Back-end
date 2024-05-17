@@ -295,5 +295,6 @@ class BookingController extends Controller
         } else {
             return response()->json($bookings, 200);
         }
+        
     }
 }
