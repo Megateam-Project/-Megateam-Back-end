@@ -25,11 +25,11 @@ class RoomController extends Controller
      *     @OA\Response(response=404, description="Resource Not Found"),
      * )
      */
+    protected $rooms;
     public function __construct()
     {
         $this->rooms = new Room();
     }
-    private $rooms;
     public function index()
     {
         $rooms = Room::all();
