@@ -5,6 +5,7 @@ use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RoomController;
+use App\Http\Controllers\FeedbackController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -23,6 +24,7 @@ Route::patch('bookings/{id}/restore', [BookingController::class, 'restore']);
 Route::post('bookings/search', [BookingController::class, 'search']);
 Route::resource('rooms', RoomController::class);
 Route::resource('users', UserController::class);
+Route::resource('feedbacks', FeedbackController::class);
 Route::namespace('Api')->group(function(){
     Route::post('login', [AuthController::class,'login']);
     Route::post('signup', [AuthController::class,'signup']);
