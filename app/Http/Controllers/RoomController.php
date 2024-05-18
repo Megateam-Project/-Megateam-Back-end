@@ -128,7 +128,8 @@ public function show($id)
         $validator = Validator::make($request->all(), $validate);
 
         if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 400);
+            return response()->json(['errors' => $validator->
+            errors()], 400);
         }
 
         $dataInsert = $validator->validated();
