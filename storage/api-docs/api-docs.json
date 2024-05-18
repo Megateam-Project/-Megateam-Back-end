@@ -416,6 +416,39 @@
                 ]
             }
         },
+        "/api/bookings/search": {
+            "post": {
+                "tags": [
+                    "Booking"
+                ],
+                "summary": "Search Bookings",
+                "description": "Search for bookings based on a keyword (e.g., date)",
+                "operationId": "search",
+                "parameters": [
+                    {
+                        "name": "searchTerm",
+                        "in": "query",
+                        "description": "Keyword to search for bookings",
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        },
+                        "example": "2024-05-17"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
         "/api/rooms": {
             "get": {
                 "tags": [
