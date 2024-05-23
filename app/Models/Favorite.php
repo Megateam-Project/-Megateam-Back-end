@@ -9,6 +9,15 @@ class Favorite extends Model
 {
     use HasFactory, SoftDeletes;
     protected $table = 'favorites';
+    public $fillable = [
+        'user_id',
+        'room_id',
+        'create_by',
+        'update_by',
+        'delete_by',
+        'create_at',
+        'update_at'
+    ] ;
     public function user(){
         return $this->belongsTo(User::class);
     }
