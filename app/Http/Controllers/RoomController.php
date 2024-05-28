@@ -80,9 +80,6 @@ public function show($id)
 }
 
     /**
- * Store a newly created resource in storage.
- */
-/**
  * @OA\Post(
  *     path="/api/rooms",
  *     summary="Create a new Room",
@@ -92,17 +89,71 @@ public function show($id)
  *     @OA\RequestBody(
  *         required=true,
  *         description="Room data",
- *         @OA\JsonContent(
- *             required={"name", "type", "price","description","image","convenient", "number", "discount", "created_by"},
- *             @OA\Property(property="name", type="string", maxLength=50, example="Deluxe Room", description="Name of the room"),
- *             @OA\Property(property="type", type="string", maxLength=50, example="Double", description="Type of the room"),
- *             @OA\Property(property="price", type="number", format="float", example="150.00", description="Price of the room"),
- *             @OA\Property(property="description", type="string", maxLength=500, nullable=true, description="Description of the room"),
- *             @OA\Property(property="image", type="string", maxLength=15000, nullable=true, description="Image URL of the room"),
- *             @OA\Property(property="convenient", type="string", maxLength=200, nullable=true, description="Convenient features of the room"),
- *             @OA\Property(property="number", type="integer", example="10", description="Number of available rooms"),
- *             @OA\Property(property="discount", type="number", format="float", example="10.00", description="Discount percentage for the room"),
- *             @OA\Property(property="create_by", type="string", maxLength=50, example="Admin", description="Name of the creator"),
+ *         @OA\MediaType(
+ *             mediaType="multipart/form-data",
+ *             @OA\Schema(
+ *                 @OA\Property(
+ *                     property="name",
+ *                     type="string",
+ *                     maxLength=50,
+ *                     example="Deluxe Room",
+ *                     description="Name of the room"
+ *                 ),
+ *                 @OA\Property(
+ *                     property="type",
+ *                     type="string",
+ *                     maxLength=50,
+ *                     example="Double",
+ *                     description="Type of the room"
+ *                 ),
+ *                 @OA\Property(
+ *                     property="price",
+ *                     type="number",
+ *                     format="float",
+ *                     example="150.00",
+ *                     description="Price of the room"
+ *                 ),
+ *                 @OA\Property(
+ *                     property="description",
+ *                     type="string",
+ *                     maxLength=500,
+ *                     nullable=true,
+ *                     description="Description of the room"
+ *                 ),
+ *                 @OA\Property(
+ *                     property="image",
+ *                     type="string",
+ *                     format="binary",
+ *                     description="Image of the room"
+ *                 ),
+ *                 @OA\Property(
+ *                     property="convenient",
+ *                     type="string",
+ *                     maxLength=200,
+ *                     nullable=true,
+ *                     description="Convenient features of the room"
+ *                 ),
+ *                 @OA\Property(
+ *                     property="number",
+ *                     type="integer",
+ *                     example="10",
+ *                     description="Number of available rooms"
+ *                 ),
+ *                 @OA\Property(
+ *                     property="discount",
+ *                     type="number",
+ *                     format="float",
+ *                     example="10.00",
+ *                     description="Discount percentage for the room"
+ *                 ),
+ *                 @OA\Property(
+ *                     property="create_by",
+ *                     type="string",
+ *                     maxLength=50,
+ *                     example="Admin",
+ *                     description="Name of the creator"
+ *                 ),
+ *             )
  *         )
  *     ),
  *     @OA\Response(response=200, description="Room created successfully"),
@@ -110,37 +161,43 @@ public function show($id)
  *     @OA\Response(response=500, description="Internal server error"),
  * )
  */
-    // swagger
-    public function store(Request $request)
-    {
-        $validate = [
-            'name' => 'required|string|max:50',
-            'type' => 'required|string|max:50',
-            'price' => 'required|numeric',
-            'description' => 'nullable|string|max:500',
-            'image' => 'nullable|string|max:15000',
-            'convenient' => 'nullable|string|max:200',
-            'number' => 'required|integer',
-            'discount' => 'required|numeric',
-            'create_by' => 'required|string|max:50',
-        ];
 
-        $validator = Validator::make($request->all(), $validate);
+   public function store(Request $request)
+{
+    $validate = [
+        'name' => 'required|string|max:50',
+        'type' => 'required|string|max:50',
+        'price' => 'required|numeric',
+        'description' => 'nullable|string|max:500',
+        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Chỉ chấp nhận các định dạng hình ảnh: JPEG, PNG, JPG, GIF và kích thước tối đa 2MB (2048 KB)
+        'convenient' => 'nullable|string|max:200',
+        'number' => 'required|integer',
+        'discount' => 'required|numeric',
+        'create_by' => 'required|string|max:50',
+    ];
 
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->
-            errors()], 400);
-        }
+    $validator = Validator::make($request->all(), $validate);
 
-        $dataInsert = $validator->validated();
-
-        try {
-            $room = Room::create($dataInsert);
-            return response()->json(['message' => 'success', 'data' => $room], 200);
-        } catch (\Exception $e) {
-            return response()->json(['message' => 'error', 'error' => $e->getMessage()], 500);
-        }
+    if ($validator->fails()) {
+        return response()->json(['errors' => $validator->errors()], 400);
     }
+
+    $dataInsert = $validator->validated();
+
+    try {
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageName = time() . '_' . $image->getClientOriginalName();
+            $image->storeAs('public/images', $imageName); // Lưu hình ảnh vào thư mục lưu trữ
+            $dataInsert['image'] = 'storage/images/' . $imageName; // Cập nhật đường dẫn hình ảnh trong dataInsert
+        }
+
+        $room = Room::create($dataInsert);
+        return response()->json(['message' => 'success', 'data' => $room], 200);
+    } catch (\Exception $e) {
+        return response()->json(['message' => 'error', 'error' => $e->getMessage()], 500);
+    }
+}
 
     /**
      * Update the specified resource in storage.
