@@ -558,6 +558,35 @@
                 }
             }
         },
+        "/api/feedbacks/{room_id}": {
+            "get": {
+                "tags": [
+                    "Feedback"
+                ],
+                "summary": "Get feedbacks for a specific room",
+                "description": "Retrieve all feedbacks associated with a specific room by its ID.",
+                "operationId": "d527fd0e63d5fa6faa019056d1a0ff00",
+                "parameters": [
+                    {
+                        "name": "room_id",
+                        "in": "path",
+                        "description": "ID of the room",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Show feedbacks for the room"
+                    },
+                    "404": {
+                        "description": "Room not found"
+                    }
+                }
+            }
+        },
         "/api/rooms/{id}": {
             "get": {
                 "tags": [
@@ -840,19 +869,8 @@
                     "description": "Room data",
                     "required": true,
                     "content": {
-                        "application/json": {
+                        "multipart/form-data": {
                             "schema": {
-                                "required": [
-                                    "name",
-                                    "type",
-                                    "price",
-                                    "description",
-                                    "image",
-                                    "convenient",
-                                    "number",
-                                    "discount",
-                                    "created_by"
-                                ],
                                 "properties": {
                                     "name": {
                                         "description": "Name of the room",
@@ -879,10 +897,9 @@
                                         "nullable": true
                                     },
                                     "image": {
-                                        "description": "Image URL of the room",
+                                        "description": "Image of the room",
                                         "type": "string",
-                                        "maxLength": 15000,
-                                        "nullable": true
+                                        "format": "binary"
                                     },
                                     "convenient": {
                                         "description": "Convenient features of the room",
