@@ -25,6 +25,7 @@ Route::post('bookings/search', [BookingController::class, 'search']);
 Route::resource('rooms', RoomController::class);
 Route::resource('users', UserController::class);
 Route::resource('feedbacks', FeedbackController::class);
+
 Route::namespace('api')->group(function(){
     Route::post('login', [AuthController::class,'login']);
     Route::post('signup', [AuthController::class,'signup']);

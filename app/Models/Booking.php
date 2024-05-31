@@ -32,8 +32,5 @@ class Booking extends Model
     public function bill(){
         return $this->hasOne(Bill::class);
     }
-    public function getAllBooking(){
-        $bookings = Booking::with('user', 'room') -> get();
-        return $bookings;
-    } 
+    
 }
