@@ -11,7 +11,10 @@ class BookingRepository
             },
             'room' => function($query) {
                 $query->select('id', 'number', 'price');
-            }
+            },
+            'payment' => function ($query) {
+                $query->select('id', 'payment_method');
+            },
         ])->get();
         return $bookings;
     } 

@@ -47,7 +47,6 @@ class AuthController extends Controller
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'phone' => ['required', 'string', 'min:8'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'avatar' => ['required', 'string'],
         ]);
 
         if ($validator->fails()) {
@@ -59,7 +58,7 @@ class AuthController extends Controller
             'email' => $request->email,
             'phone' => $request->phone,
             'password' => bcrypt($request->password),
-            'avatar' => $request->avatar,
+            // 'avatar' => $request->avatar,
             'role' => $request->role,
             'create_by' => $request->create_by,
         ]);

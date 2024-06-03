@@ -170,6 +170,7 @@ class BookingController extends Controller
         $rules = [
             'user_id' => 'required|integer',
             'room_id' => 'required|integer',
+            'payment_id' => 'required|integer',
             'check_in_date' => 'required|date',
             'check_out_date' => 'required|date|after:check_in_date',
             'update_by' => 'required|string',
