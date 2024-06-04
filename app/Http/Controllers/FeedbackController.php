@@ -33,7 +33,7 @@ class FeedbackController extends Controller
      */
     public function index()
     {
-        $feedbacks = Feedback::all();
+        $feedbacks = Feedback::with('user', 'room')->get();
         return response()->json($feedbacks);
     }
    /**
