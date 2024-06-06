@@ -122,7 +122,7 @@ public function show($id)
             'convenient' => 'nullable|string|max:200',
             'number' => 'required|integer',
             'discount' => 'required|numeric',
-            'create_by' => 'required|string|max:50',
+            // 'create_by' => 'required|string|max:50',
         ];
 
         $validator = Validator::make($request->all(), $validate);

@@ -1,6 +1,7 @@
 <?php
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -34,4 +35,7 @@ Route::namespace('api')->group(function(){
     Route::post('logout', [AuthController::class,'logout']);
     Route::post('profile', [AuthController::class,'profile']);
 });
+// routes/api.php
+Route::get('/user/{userId}/favorite-rooms', [FavoriteController::class, 'getFavoriteRooms']);
+
 
