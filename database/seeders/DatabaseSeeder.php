@@ -17,10 +17,10 @@ class DatabaseSeeder extends Seeder
         $this->call([
             UserSeeder::class,
             RoomSeeder::class,
+            PaymentSeeder::class,
             BookingSeeder::class,
             BillSeeder::class,
             FavoriteSeeder::class,
-            PaymentSeeder::class,
             FeedbackSeeder::class,
         ]);
     }

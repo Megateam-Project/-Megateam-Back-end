@@ -18,11 +18,7 @@ class PaymentFactory extends Factory
     public function definition(): array
     {
         return [
-            'booking_id' => function(){
-                return Booking::factory()->create()->id;
-            },
             'payment_method' => fake()-> randomElement(['Tiền mặt', 'Momo']),
-            'date' => fake() -> dateTime(),
         ];
     }
 }

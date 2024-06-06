@@ -1,10 +1,160 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "title": "Your super  ApplicationAPI",
+        "title": "Your API Title",
+        "description": "Description of your API",
+        "termsOfService": "https://example.com/terms/",
+        "contact": {
+            "name": "Your Name",
+            "email": "your@email.com"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
         "version": "1.0.0"
     },
     "paths": {
+        "/api/signup": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Register User",
+                "description": "Register New User",
+                "operationId": "7e21f43155c4b9f9bfb7143d38a8554e",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Jhon Doe"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "example": "jhondoe@example.com"
+                                    },
+                                    "phone": {
+                                        "type": "string",
+                                        "example": "0437846324"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "12345678"
+                                    },
+                                    "password_confirmation": {
+                                        "type": "string",
+                                        "example": "12345678"
+                                    },
+                                    "avatar": {
+                                        "type": "string"
+                                    },
+                                    "role": {
+                                        "type": "string",
+                                        "example": "user"
+                                    },
+                                    "create_by": {
+                                        "type": "string",
+                                        "example": "user"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Register New User Data"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/api/login": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Login",
+                "description": "Login",
+                "operationId": "a3b306d14572d1f4bd6c064b3233e7b8",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "example": "admin@example.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "123456"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Login"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/api/logout": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Logout",
+                "description": "Logout",
+                "operationId": "fe8f3429cd6979b3b4517e186505f9f9",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "token": {
+                                        "type": "string",
+                                        "example": "your_access_token_here"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Logout"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
         "/api/bookings": {
             "get": {
                 "tags": [
@@ -266,17 +416,29 @@
                 ]
             }
         },
-        "/api/rooms": {
-            "get": {
+        "/api/bookings/search": {
+            "post": {
                 "tags": [
-                    "Room"
+                    "Booking"
                 ],
-                "summary": "Get Room List",
-                "description": "Get Room List as Array",
-                "operationId": "indexV2",
+                "summary": "Search Bookings",
+                "description": "Search for bookings based on a keyword (e.g., date)",
+                "operationId": "search",
+                "parameters": [
+                    {
+                        "name": "searchTerm",
+                        "in": "query",
+                        "description": "Keyword to search for bookings",
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        },
+                        "example": "2024-05-17"
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "Get Room List as Array"
+                        "description": "Successful operation"
                     },
                     "400": {
                         "description": "Bad request"
@@ -284,86 +446,69 @@
                     "404": {
                         "description": "Resource Not Found"
                     }
-                },
-                "security": [
-                    {
-                        "bearer": []
+                }
+            }
+        },
+        "/api/feedbacks": {
+            "get": {
+                "tags": [
+                    "Feedback"
+                ],
+                "summary": "Get all feedbacks",
+                "description": "Returns a list of all feedbacks.",
+                "operationId": "cb3eb44dda778b5f0c838a905864c418",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "404": {
+                        "description": "No feedbacks found"
                     }
-                ]
+                }
             },
             "post": {
                 "tags": [
-                    "Room"
+                    "Feedback"
                 ],
-                "summary": "Create a new Room",
-                "operationId": "store",
+                "summary": "Create a new feedback",
+                "description": "Create a new feedback for a specific room by a user.",
+                "operationId": "d851e5d2f047fb999dd85e467164aa2a",
                 "requestBody": {
-                    "description": "Room data",
                     "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
                                 "required": [
-                                    "name",
-                                    "type",
-                                    "price",
-                                    "description",
-                                    "image",
-                                    "convenient",
-                                    "number",
-                                    "discount",
-                                    "created_by"
+                                    "room_id",
+                                    "user_id",
+                                    "content",
+                                    "create_by"
                                 ],
                                 "properties": {
-                                    "name": {
-                                        "description": "Name of the room",
-                                        "type": "string",
-                                        "maxLength": 50,
-                                        "example": "Deluxe Room"
-                                    },
-                                    "type": {
-                                        "description": "Type of the room",
-                                        "type": "string",
-                                        "maxLength": 50,
-                                        "example": "Double"
-                                    },
-                                    "price": {
-                                        "description": "Price of the room",
-                                        "type": "number",
-                                        "format": "float",
-                                        "example": "150.00"
-                                    },
-                                    "description": {
-                                        "description": "Description of the room",
-                                        "type": "string",
-                                        "maxLength": 500,
-                                        "nullable": true
-                                    },
-                                    "image": {
-                                        "description": "Image URL of the room",
-                                        "type": "string",
-                                        "maxLength": 15000,
-                                        "nullable": true
-                                    },
-                                    "convenient": {
-                                        "description": "Convenient features of the room",
-                                        "type": "string",
-                                        "maxLength": 200,
-                                        "nullable": true
-                                    },
-                                    "number": {
-                                        "description": "Number of available rooms",
+                                    "room_id": {
                                         "type": "integer",
-                                        "example": "10"
+                                        "example": "1"
                                     },
-                                    "discount": {
-                                        "description": "Discount percentage for the room",
-                                        "type": "number",
-                                        "format": "float",
-                                        "example": "10.00"
+                                    "user_id": {
+                                        "type": "integer",
+                                        "example": "1"
+                                    },
+                                    "content": {
+                                        "type": "string",
+                                        "maxLength": 250,
+                                        "example": "This is a feedback content"
                                     },
                                     "create_by": {
-                                        "description": "Name of the creator",
+                                        "type": "string",
+                                        "maxLength": 50,
+                                        "example": "User"
+                                    },
+                                    "update_by": {
+                                        "type": "string",
+                                        "maxLength": 50,
+                                        "example": "Admin"
+                                    },
+                                    "delete_by": {
                                         "type": "string",
                                         "maxLength": 50,
                                         "example": "Admin"
@@ -375,21 +520,71 @@
                     }
                 },
                 "responses": {
-                    "200": {
-                        "description": "Room created successfully"
+                    "201": {
+                        "description": "Feedback created successfully"
                     },
                     "400": {
-                        "description": "Bad request"
-                    },
-                    "500": {
-                        "description": "Internal server error"
+                        "description": "Invalid data provided"
                     }
-                },
-                "security": [
+                }
+            }
+        },
+        "/api/feedbacks/{id}": {
+            "get": {
+                "tags": [
+                    "Feedback"
+                ],
+                "summary": "Get a specific feedback",
+                "description": "Returns a specific feedback.",
+                "operationId": "83a583bc7cad09f2b1b17a5ead0f4c52",
+                "parameters": [
                     {
-                        "bearer": []
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the feedback",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
                     }
-                ]
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "404": {
+                        "description": "Feedback not found"
+                    }
+                }
+            }
+        },
+        "/api/feedbacks/{room_id}": {
+            "get": {
+                "tags": [
+                    "Feedback"
+                ],
+                "summary": "Get feedbacks for a specific room",
+                "description": "Retrieve all feedbacks associated with a specific room by its ID.",
+                "operationId": "d527fd0e63d5fa6faa019056d1a0ff00",
+                "parameters": [
+                    {
+                        "name": "room_id",
+                        "in": "path",
+                        "description": "ID of the room",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Show feedbacks for the room"
+                    },
+                    "404": {
+                        "description": "Room not found"
+                    }
+                }
             }
         },
         "/api/rooms/{id}": {
@@ -630,6 +825,120 @@
                     },
                     "404": {
                         "description": "Resource Not Found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/rooms": {
+            "get": {
+                "tags": [
+                    "Room"
+                ],
+                "summary": "Get Room List",
+                "description": "Get Room List as Array",
+                "operationId": "indexV2",
+                "responses": {
+                    "200": {
+                        "description": "Get Room List as Array"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Room"
+                ],
+                "summary": "Create a new Room",
+                "operationId": "store",
+                "requestBody": {
+                    "description": "Room data",
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "description": "Name of the room",
+                                        "type": "string",
+                                        "maxLength": 50,
+                                        "example": "Deluxe Room"
+                                    },
+                                    "type": {
+                                        "description": "Type of the room",
+                                        "type": "string",
+                                        "maxLength": 50,
+                                        "example": "Double"
+                                    },
+                                    "price": {
+                                        "description": "Price of the room",
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": "150.00"
+                                    },
+                                    "description": {
+                                        "description": "Description of the room",
+                                        "type": "string",
+                                        "maxLength": 500,
+                                        "nullable": true
+                                    },
+                                    "image": {
+                                        "description": "Image of the room",
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "convenient": {
+                                        "description": "Convenient features of the room",
+                                        "type": "string",
+                                        "maxLength": 200,
+                                        "nullable": true
+                                    },
+                                    "number": {
+                                        "description": "Number of available rooms",
+                                        "type": "integer",
+                                        "example": "10"
+                                    },
+                                    "discount": {
+                                        "description": "Discount percentage for the room",
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": "10.00"
+                                    },
+                                    "create_by": {
+                                        "description": "Name of the creator",
+                                        "type": "string",
+                                        "maxLength": 50,
+                                        "example": "Admin"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Room created successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "500": {
+                        "description": "Internal server error"
                     }
                 },
                 "security": [

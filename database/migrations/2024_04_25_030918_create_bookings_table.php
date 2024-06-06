@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('room_id');
             $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('payment_id')->default(1);
             $table->dateTime('check_in_date');
             $table->dateTime('check_out_date');
             $table->string('create_by')->nullable();
@@ -24,7 +25,7 @@ return new class extends Migration
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('room_id')->references('id')->on('rooms');
-          
+            $table->foreign('payment_id')->references('id')->on('payments');
         });
     }
 

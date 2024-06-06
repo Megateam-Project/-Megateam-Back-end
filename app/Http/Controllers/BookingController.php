@@ -1,11 +1,11 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use App\Repositories\BookingRepository;
+use App\Http\Requests\BookingRequest;
 
 class BookingController extends Controller
 {
@@ -25,14 +25,18 @@ class BookingController extends Controller
      *     @OA\Response(response=404, description="Resource Not Found"),
      * )
      */
+   
     public function __construct()
     {
         $this->bookings = new Booking;
+        $this->bookingRepo = new BookingRepository;
+
     }
     private $bookings;
+    private $bookingRepo;
     public function index()
     {
-        $listBooking = $this->bookings->getAllBooking();
+        $listBooking = $this->bookingRepo->getAllBooking();
         return response()->json($listBooking);
     }
     /**
@@ -70,7 +74,7 @@ class BookingController extends Controller
      *     )
      * )
      */
-    public function store(Request $request)
+    public function store(BookingRequest $request)
     {
         $validate = [
             'user_id' => 'required|integer',
@@ -118,9 +122,9 @@ class BookingController extends Controller
      */
     public function show(string $id)
     {
-        $booking = Booking::with('user', 'room')->find($id);
-        if ($booking) {
-            return response()->json(['booking' => $booking], 200);
+        $detailBooking = $this->bookingRepo->getDetailBooking($id);
+        if ($detailBooking) {
+            return response()->json(['Booking' => $detailBooking], 200);
         } else {
             return response()->json(['message' => 'Booking not found'], 404);
         }
@@ -166,6 +170,7 @@ class BookingController extends Controller
         $rules = [
             'user_id' => 'required|integer',
             'room_id' => 'required|integer',
+            'payment_id' => 'required|integer',
             'check_in_date' => 'required|date',
             'check_out_date' => 'required|date|after:check_in_date',
             'update_by' => 'required|string',
@@ -252,5 +257,48 @@ class BookingController extends Controller
         } else {
             return response()->json(['message' => 'Booking not found'], 404);
         }
+    }
+    /**
+     * @OA\POST(
+     *     path="/api/bookings/search",
+     *     tags={"Booking"},
+     *     summary="Search Bookings",
+     *     description="Search for bookings based on a keyword (e.g., date)",
+     *     operationId="search",
+     *     @OA\Parameter(
+     *         name="searchTerm",
+     *         in="query",
+     *         description="Keyword to search for bookings",
+     *         example="2024-05-17",
+     *         @OA\Schema(type="string", format="date")
+     *     ),
+     *     @OA\Response(response=200, description="Successful operation"),
+     *     @OA\Response(response=400, description="Bad request"),
+     *     @OA\Response(response=404, description="Resource Not Found")
+     * )
+     */
+
+    public function search(Request $request)
+    {
+        $searchTerm = $request->input('searchTerm');
+        $searchTerm = '%' . $searchTerm . '%';
+        $bookingDate = Booking::where('check_in_date', 'LIKE', $searchTerm)
+            ->orWhere('check_out_date', 'LIKE', $searchTerm)
+            ->with('room')->get();
+        $roomNumber = $request->input('number');
+        $bookings = Booking::whereHas('room', function ($query) use ($roomNumber) {
+            $query->where('number', $roomNumber);
+        })-> with('room')->get();
+        if (!$bookingDate) {
+            return response()->json(['message' => 'Booking not found'], 404);
+        } else {
+            return response()->json($bookingDate, 200);
+        }
+        if (!$bookings) {
+            return response()->json(['message' => 'Booking not found'], 404);
+        } else {
+            return response()->json($bookings, 200);
+        }
+        
     }
 }

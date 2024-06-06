@@ -13,15 +13,8 @@ return new class extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('booking_id');
             $table->string('payment_method');
-            $table->dateTime('date');
-            $table->string('create_by')->nullable();
-            $table->string('update_by')->nullable();
-            $table->string('delete_by')->nullable();
-            $table->softDeletes();
             $table->timestamps();
-            $table->foreign('booking_id')->references('id')->on('bookings');
         });
     }
 
