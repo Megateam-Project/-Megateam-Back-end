@@ -1,12 +1,11 @@
 <?php
-
 namespace App\Http\Controllers;
-
-use Illuminate\Support\Carbon;
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use App\Repositories\BookingRepository;
+use App\Http\Requests\BookingRequest;
 
 class BookingController extends Controller
 {
@@ -26,14 +25,18 @@ class BookingController extends Controller
      *     @OA\Response(response=404, description="Resource Not Found"),
      * )
      */
+   
     public function __construct()
     {
         $this->bookings = new Booking;
+        $this->bookingRepo = new BookingRepository;
+
     }
     private $bookings;
+    private $bookingRepo;
     public function index()
     {
-        $listBooking = $this->bookings->getAllBooking();
+        $listBooking = $this->bookingRepo->getAllBooking();
         return response()->json($listBooking);
     }
     /**
@@ -71,7 +74,7 @@ class BookingController extends Controller
      *     )
      * )
      */
-    public function store(Request $request)
+    public function store(BookingRequest $request)
     {
         $validate = [
             'user_id' => 'required|integer',
@@ -119,9 +122,9 @@ class BookingController extends Controller
      */
     public function show(string $id)
     {
-        $booking = Booking::with('user', 'room')->find($id);
-        if ($booking) {
-            return response()->json(['booking' => $booking], 200);
+        $detailBooking = $this->bookingRepo->getDetailBooking($id);
+        if ($detailBooking) {
+            return response()->json(['Booking' => $detailBooking], 200);
         } else {
             return response()->json(['message' => 'Booking not found'], 404);
         }
@@ -167,6 +170,7 @@ class BookingController extends Controller
         $rules = [
             'user_id' => 'required|integer',
             'room_id' => 'required|integer',
+            'payment_id' => 'required|integer',
             'check_in_date' => 'required|date',
             'check_out_date' => 'required|date|after:check_in_date',
             'update_by' => 'required|string',
@@ -295,5 +299,6 @@ class BookingController extends Controller
         } else {
             return response()->json($bookings, 200);
         }
+        
     }
 }
