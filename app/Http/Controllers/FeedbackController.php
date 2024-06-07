@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Feedback;
+use App\Models\Room;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -110,6 +112,33 @@ class FeedbackController extends Controller
         $feedback = Feedback::findOrFail($id);
         return response()->json($feedback);
     }
+
+    /**
+     * @OA\Get(
+     *     path="/api/feedbacks/{room_id}",
+     *     summary="Get feedbacks for a specific room",
+     *     tags={"Feedback"},
+     *     description="Retrieve all feedbacks associated with a specific room by its ID.",
+     *     @OA\Parameter(
+     *         name="room_id",
+     *         in="path",
+     *         description="ID of the room",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(response=200, description="Show feedbacks for the room"),
+     *     @OA\Response(response=404, description="Room not found")
+     * )
+     */
+    public function getRoomFeedbacks(string $room_id)
+    {
+        $feedbacks = Feedback::where('room_id', $room_id)->with('user')->get();
+        if ($feedbacks->isEmpty()) {
+            return response()->json(['message' => 'No feedbacks found for the room'], 404);
+        }
+        return response()->json(['feedbacks' => $feedbacks], 200);
+    }
+
 
     /**
      * Update the specified resource in storage.

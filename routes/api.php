@@ -22,7 +22,7 @@ use App\Http\Controllers\PaymentController;
 // Route::middleware('auth')->get('/user', function (Request $request) {
 //     return $request->user();
 // });
-Route::apiResource('bookings', BookingController::class);
+Route::resource('bookings', BookingController::class);
 Route::patch('bookings/{id}/restore', [BookingController::class, 'restore']);
 Route::post('bookings/search', [BookingController::class, 'search']);
 Route::resource('rooms', RoomController::class);
