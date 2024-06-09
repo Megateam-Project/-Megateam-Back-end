@@ -168,7 +168,6 @@ class BookingController extends Controller
     public function update(Request $request, $id)
     {
         $rules = [
-            'user_id' => 'required|integer',
             'room_id' => 'required|integer',
             'payment_id' => 'required|integer',
             'check_in_date' => 'required|date',
@@ -250,6 +249,7 @@ class BookingController extends Controller
         if ($booking) {
             if ($booking->trashed()) {
                 $booking->restore();
+                $booking->update(['delete_by' => null]);
                 return response()->json(['message' => 'Booking restored successfully'], 200);
             } else {
                 return response()->json(['message' => 'Booking is not deleted'], 400);
