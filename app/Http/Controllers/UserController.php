@@ -76,7 +76,6 @@ class UserController extends Controller
             'name' => 'required|string',
             'email' => 'required|string|email|unique:users',
             'phone' => 'required|string',
-            'avatar' => 'required|string',
             'role' => 'required|string',
             'password' => 'required|string',
             'create_by' => 'required|string'
@@ -167,13 +166,17 @@ class UserController extends Controller
     public function update(Request $request, string $id)
     {
         try {
-            $request->validate([
+            $validate = Validator::make($request->all(),[
                 'name' => 'required|string',
                 'email' => 'required|string',
                 'phone' => 'required|string',
-                'avatar' => 'required|string',
-                'update_by' => 'required|string'
+                // 'avatar' => 'required|string',
+                // 'update_by' => 'required|string'
             ]);
+            if($validate->fails()){
+                return response()->json(['error'=>$validate->errors()],404);
+            }
+
             $user = User::findOrFail($id);
             $user->update($request->all());
             return response()->json(['message' => 'Updated user successfully'], 200);

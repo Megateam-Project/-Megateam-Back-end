@@ -40,6 +40,8 @@ public function getJWTIdentifier()
 
     public function getJWTCustomClaims()
     {
-        return [];
+        return [
+            'id'=>$this->id
+        ];
     }
 }
