@@ -302,4 +302,50 @@ public function show($id)
             return response()->json(['message' => 'error', 'error' => $e->getMessage()], 500);
         }
     }
+
+    public function search(Request $request)
+    {
+        $searchTerm = $request->input('searchTerm');
+        $searchTerm = '%' . $searchTerm . '%';
+        $checkInDate = $request->input('check_in_date');
+        $checkOutDate = $request->input('check_out_date');
+    
+        $room = Room::where('type', 'LIKE', $searchTerm)
+                     ->with(['booking' => function ($query) use ($checkInDate, $checkOutDate) {
+                         $query->where('check_in_date', '>=', $checkInDate)
+                               ->where('check_out_date', '<=', $checkOutDate);
+                     }])
+                     ->get();
+    
+        $result = [];
+        foreach ($room as $r) {
+            if ($r->booking->isEmpty()) {
+                $roomData = [
+                    'id' => $r->id,
+                    'name'=>$r->name,
+                    'type' => $r->type,
+                    'description'=>$r->description,
+                    'price'=>$r->price,
+                    'image'=>$r->image,
+                    'convenient'=>$r->convenient,
+                    'number'=>$r->number,
+                    'discount'=>$r->discount,
+                    'deleted_at' => $r->deleted_at,
+                    // 'check_in_date' => optional($r->booking->first())->check_in_date,
+                    // 'check_out_date' => optional($r->booking->first())->check_out_date
+                ];
+                $result[] = $roomData;
+            }
+        }
+    
+        if (count($result) === 0) {
+            return response()->json([
+                'message' => 'No rooms found matching the search term.'
+            ], 200);
+        } else {
+            return response()->json([
+                'rooms' => $result
+            ], 200);
+        }
+    }
 }
