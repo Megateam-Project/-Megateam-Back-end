@@ -3,10 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Favorite;
 use Illuminate\Http\Request;
 
 class FavoriteController extends Controller
 {
+    public function getFavoriteRooms($userId)
+    {
+        $wishlist = Favorite::where('user_id', $userId)->with('room')->get();
+        $rooms = $wishlist->map(function ($item) {
+            return $item->room;
+        });
+        return response()->json($rooms);
+    }
     /**
      * Display a listing of the resource.
      */

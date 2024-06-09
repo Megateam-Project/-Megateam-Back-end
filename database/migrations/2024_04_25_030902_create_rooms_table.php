@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('type');
             $table->string('description');
             $table->decimal('price');
-            $table->string('image');
+            $table->string('image')->default('https://images.pexels.com/photos/1643383/pexels-photo-1643383.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
             $table->string('convenient');
             $table->integer('number');
             $table->decimal('discount');

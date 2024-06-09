@@ -16,13 +16,12 @@ return new class extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('phone');
-            $table->string('avatar');
+            $table->string('avatar')->default('https://s.net.vn/76Th');;
             $table->string('password');
             $table->string('role');
             $table->string('create_by')->nullable();
             $table->string('update_by')->nullable();
             $table->string('delete_by')->nullable();
-            $table->string('delete_at')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

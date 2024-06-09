@@ -13,6 +13,7 @@ class Booking extends Model
     public $fillable = [
         'user_id',
         'room_id',
+        'payment_id',
         'check_in_date',
         'check_out_date',
         'create_by',
@@ -20,20 +21,20 @@ class Booking extends Model
         'delete_at',
         'delete_by',
     ];
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
-    public function room(){
+    public function room()
+    {
         return $this->belongsTo(Room::class);
     }
-    public function payment(){
-        return $this->hasOne(Payment::class);
-    }
-    public function bill(){
+    public function bill()
+    {
         return $this->hasOne(Bill::class);
     }
-    public function getAllBooking(){
-        $bookings = Booking::with('user', 'room') -> get();
-        return $bookings;
-    } 
+    public function payment()
+    {
+        return $this->hasOne(Payment::class, 'id', 'payment_id');
+    }
 }
