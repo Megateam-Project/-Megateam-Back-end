@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Room;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
+
 
 class RoomController extends Controller
 {
@@ -169,7 +171,7 @@ public function show($id)
         'type' => 'required|string|max:50',
         'price' => 'required|numeric',
         'description' => 'nullable|string|max:500',
-        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Chỉ chấp nhận các định dạng hình ảnh: JPEG, PNG, JPG, GIF và kích thước tối đa 2MB (2048 KB)
+        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', 
         'convenient' => 'nullable|string|max:200',
         'number' => 'required|integer',
         'discount' => 'required|numeric',
@@ -199,75 +201,84 @@ public function show($id)
     }
 }
 
-    /**
+   /**
      * Update the specified resource in storage.
+     * 
+     * @OA\Put(
+     *     path="/api/rooms/{id}",
+     *     summary="Update a specific Room",
+     *     tags={"Room"},
+     *     operationId="update",
+     *     security={{"bearer":{}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="Room ID",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         description="Room data",
+     *         @OA\JsonContent(
+     *             required={"name", "type", "price", "description", "image", "convenient", "number", "discount", "update_by"},
+     *             @OA\Property(property="name", type="string", example="Deluxe Room"),
+     *             @OA\Property(property="type", type="string", example="Double"),
+     *             @OA\Property(property="price", type="number", format="float", example="150.00"),
+     *             @OA\Property(property="description", type="string", maxLength=500, nullable=true, description="Description of the room"),
+     *             @OA\Property(property="image", type="string", maxLength=15000, nullable=true, description="Image URL of the room"),
+     *             @OA\Property(property="convenient", type="string", maxLength=200, nullable=true, description="Convenient features of the room"),
+     *             @OA\Property(property="number", type="integer", example="10", description="Number of available rooms"),
+     *             @OA\Property(property="discount", type="number", format="float", example="10.00", description="Discount percentage for the room"),
+     *             @OA\Property(property="update_by", type="string", maxLength=50, example="Admin", description="Name of the updater"),
+     *         )
+     *     ),
+     *     @OA\Response(response=200, description="Room updated successfully"),
+     *     @OA\Response(response=400, description="Bad request"),
+     *     @OA\Response(response=404, description="Resource Not Found"),
+     *     @OA\Response(response=500, description="Internal server error"),
+     * )
      */
-    /**
- * @OA\Put(
- *     path="/api/rooms/{id}",
- *     summary="Update a specific Room",
- *     tags={"Room"},
- *     operationId="update",
- *     security={{"bearer":{}}},
- *     @OA\Parameter(
- *         name="id",
- *         in="path",
- *         description="Room ID",
- *         required=true,
- *         @OA\Schema(type="integer")
- *     ),
- *     @OA\RequestBody(
- *         required=true,
- *         description="Room data",
- *         @OA\JsonContent(
- *             required={"name", "type", "price","description","image","convenient", "number", "discount", "update_by"},
- *             @OA\Property(property="name", type="string", example="Deluxe Room"),
- *             @OA\Property(property="type", type="string", example="Double"),
- *             @OA\Property(property="price", type="number", format="float", example="150.00"),
- *             @OA\Property(property="description", type="string", maxLength=500, nullable=true, description="Description of the room"),
- *             @OA\Property(property="image", type="string", maxLength=15000, nullable=true, description="Image URL of the room"),
- *             @OA\Property(property="convenient", type="string", maxLength=200, nullable=true, description="Convenient features of the room"),
- *             @OA\Property(property="number", type="integer", example="10", description="Number of available rooms"),
- *             @OA\Property(property="discount", type="number", format="float", example="10.00", description="Discount percentage for the room"),
- *             @OA\Property(property="update_by", type="string", maxLength=50, example="Admin", description="Name of the updater"),
- *         )
- *     ),
- *     @OA\Response(response=200, description="Room updated successfully"),
- *     @OA\Response(response=400, description="Bad request"),
- *     @OA\Response(response=404, description="Resource Not Found"),
- *     @OA\Response(response=500, description="Internal server error"),
- * )
- */
     public function update(Request $request, $id)
-    {
-        $validate = [
-            'name' => 'required|string|max:50',
-            'type' => 'required|string|max:50',
-            'price' => 'required|numeric',
-            'description' => 'nullable|string|max:500',
-            'image' => 'nullable|string|max:15000',
-            'convenient' => 'nullable|string|max:200',
-            'number' => 'required|integer',
-            'discount' => 'required|numeric',
-            'update_by' => 'required|string|max:50',
-        ];
+{
+    $validate = [
+        'name' => 'required|string|max:50',
+        'type' => 'required|string|max:50',
+        'price' => 'required|numeric',
+        'description' => 'nullable|string|max:500',
+        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        'convenient' => 'nullable|string|max:200',
+        'number' => 'required|integer',
+        'discount' => 'required|numeric',
+        'update_by' => 'required|string|max:50',
+    ];
 
-        $validator = Validator::make($request->all(), $validate);
+    $validator = Validator::make($request->all(), $validate);
 
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 400);
-        }
-
-        $dataUpdate = $validator->validated();
-
-        try {
-            $room = Room::findOrFail($id);
-            $room->update($dataUpdate);
-            return response()->json(['message' => 'success', 'data' => $room], 200);
-        } catch (\Exception $e) {
-            return response()->json(['message' => 'error', 'error' => $e->getMessage()], 500);
-        }
+    if ($validator->fails()) {
+        return response()->json(['errors' => $validator->errors()], 400);
     }
+
+    $dataUpdate = $validator->validated();
+
+    try {
+        $room = Room::findOrFail($id);
+        if ($request->hasFile('image')) {
+            // Xóa ảnh cũ nếu có
+            if ($room->image) {
+                Storage::delete(str_replace('storage/', 'public/', $room->image));
+            }
+            $image = $request->file('image');
+            $imageName = time() . '_' . $image->getClientOriginalName();
+            $image->storeAs('public/images', $imageName);
+            $dataUpdate['image'] = 'storage/images/' . $imageName;
+        }
+        $room->update($dataUpdate);
+        return response()->json(['message' => 'success', 'data' => $room], 200);
+    } catch (\Exception $e) {
+        return response()->json(['message' => 'error', 'error' => $e->getMessage()], 500);
+    }
+}
 
     /**
  * Remove the specified resource from storage.
