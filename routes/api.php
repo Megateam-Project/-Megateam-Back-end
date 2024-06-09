@@ -25,6 +25,7 @@ use App\Http\Controllers\PaymentController;
 Route::resource('bookings', BookingController::class);
 Route::patch('bookings/{id}/restore', [BookingController::class, 'restore']);
 Route::post('bookings/search', [BookingController::class, 'search']);
+Route::post('rooms/search', [RoomController::class, 'search']);
 Route::resource('rooms', RoomController::class);
 Route::resource('users', UserController::class);
 Route::resource('feedbacks', FeedbackController::class);
