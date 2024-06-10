@@ -145,16 +145,16 @@ class UserController extends Controller
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\MediaType(
-     *             mediaType="application/json",
+     *             mediaType="multipart/form-data",
      *             @OA\Schema(
      *                 type="object",
-     *             @OA\Property(property="name", type="string", example="Khanh Nhi"),
-     *             @OA\Property(property="email", type="string", example="nhi@gmail.com"),
-     *             @OA\Property(property="phone", type="string", example="0374943992"),
-     *             @OA\Property(property="avatar", type="string", example="https://s.net.vn/a5IG"),
-     *             @OA\Property(property="password", type="string", example="12345678"),
-     *             @OA\Property(property="role", type="string", example="admin/user"),
-     *             @OA\Property(property="update_by", type="string", example="Admin"),
+     *                 @OA\Property(property="name", type="string", example="Khanh Nhi"),
+     *                 @OA\Property(property="email", type="string", example="nhi@gmail.com"),
+     *                 @OA\Property(property="phone", type="string", example="0374943992"),
+     *                 @OA\Property(property="avatar", type="string", format="binary"),
+     *                 @OA\Property(property="password", type="string", example="12345678"),
+     *                 @OA\Property(property="role", type="string", example="admin/user"),
+     *                 @OA\Property(property="update_by", type="string", example="Admin"),
      *             )
      *         )
      *     ),
@@ -167,24 +167,37 @@ class UserController extends Controller
     public function update(Request $request, string $id)
     {
         try {
-            $validate = Validator::make($request->all(),[
+            $inputs = $request->all();
+            $validate = Validator::make($inputs, [
                 'name' => 'required|string',
                 'email' => 'required|string',
                 'phone' => 'required|string',
-                // 'avatar' => 'required|string',
-                // 'update_by' => 'required|string'
+                'avatar' => 'required|image|max:2048', // thêm validation cho ảnh avatar
+                'update_by' => 'required|string'
             ]);
-            if($validate->fails()){
-                return response()->json(['error'=>$validate->errors()],404);
-            }
+            // if ($validate->fails()) {
+            //     return response()->json(['error' => $validate->errors()], 404);
+            // }
 
             $user = User::findOrFail($id);
-            $user->update($request->all());
-            return response()->json(['message' => 'Updated user successfully'], 200);
+
+            // xử lý upload ảnh avatar
+            if ($request->hasFile('avatar')) {
+                $avatar = $request->file('avatar');
+                $avatarName = time() . '.' . $avatar->getClientOriginalExtension();
+                $avatar->move(public_path('uploads/avatars'), $avatarName);
+                $inputs['avatar'] = 'uploads/avatars/' . $avatarName;
+                // return response()->json(['data' => $user], 200);
+            }
+
+            $user->update($inputs);
+            return response()->json(['data' => $user], 200);
         } catch (\Exception $e) {
             return response()->json(['message' => 'error', 'error' => $e->getMessage()], 500);
         }
     }
+
+
     /**
      * Remove the specified resource from storage.
      */
