@@ -331,8 +331,8 @@ public function show($id)
                     'number'=>$r->number,
                     'discount'=>$r->discount,
                     'deleted_at' => $r->deleted_at,
-                    // 'check_in_date' => optional($r->booking->first())->check_in_date,
-                    // 'check_out_date' => optional($r->booking->first())->check_out_date
+                    'check_in_date' => optional($r->booking->first())->check_in_date,
+                    'check_out_date' => optional($r->booking->first())->check_out_date
                 ];
                 $result[] = $roomData;
             }
