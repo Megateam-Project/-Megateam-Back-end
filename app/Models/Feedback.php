@@ -10,6 +10,14 @@ class Feedback extends Model
 {
     use HasFactory, SoftDeletes;
     protected $table = 'feedbacks';
+    protected $fillable = [
+        'room_id',
+        'user_id',
+        'content',
+        'create_by',
+        'update_by',
+        'delete_by',
+    ];
     public function user(){
         return $this->belongsTo(User::class);
     }

@@ -47,7 +47,7 @@ class AuthController extends Controller
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'phone' => ['required', 'string', 'min:8'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'avatar' => ['required', 'string'],
+            // 'avatar' => ['required', 'string'],
         ]);
 
         if ($validator->fails()) {
@@ -59,7 +59,7 @@ class AuthController extends Controller
             'email' => $request->email,
             'phone' => $request->phone,
             'password' => bcrypt($request->password),
-            'avatar' => $request->avatar,
+            // 'avatar' => $request->avatar,
             'role' => $request->role,
             'create_by' => $request->create_by,
         ]);
@@ -100,10 +100,18 @@ class AuthController extends Controller
 
         $credentials = $request->only('email', 'password');
         if ($token = JWTAuth::attempt($credentials)) {
+            $user = JWTAuth::user();
             return response()->json([
                 'response' => 'success',
                 'result' => [
                     'token' => $token,
+                    'user' => [
+                        'id' => $user->id,
+                        'email' => $user->email,
+                        'name' => $user->name,
+                        'avatar' => $user->avatar,
+                        'phone' => $user->phone,
+                    ],
                 ],
             ]);
         }
