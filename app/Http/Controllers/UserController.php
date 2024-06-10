@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 class UserController extends Controller
 {
     /**
@@ -164,27 +165,38 @@ class UserController extends Controller
      *     security={{"bearerAuth":{}}}
      * )
      */
-    public function update(Request $request, string $id)
-    {
-        try {
-            $validate = Validator::make($request->all(),[
-                'name' => 'required|string',
-                'email' => 'required|string',
-                'phone' => 'required|string',
-                'avatar' =>'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', 
-                'update_by' => 'required|string'
-            ]);
-            if($validate->fails()){
-                return response()->json(['error'=>$validate->errors()],404);
-            }
+        public function update(Request $request, string $id)
+        {
+            try {
+                $validate = Validator::make($request->all(),[
+                    'name' => 'required|string',
+                    'email' => 'required|string',
+                    'phone' => 'required|string',
+                    'avatar' =>'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', 
+                    'update_by' => 'required|string'
+                ]);
+                if($validate->fails()){
+                    return response()->json(['error'=>$validate->errors()],404);
+                }
 
-            $user = User::findOrFail($id);
-            $user->update($request->all());
-            return response()->json(['message' => 'Updated user successfully'], 200);
-        } catch (\Exception $e) {
-            return response()->json(['message' => 'error', 'error' => $e->getMessage()], 500);
+                $user = User::findOrFail($id);
+                if ($request->hasFile('avatar')) {
+                    if ($user->avatar) {
+                        Storage::delete(str_replace('storage/', 'public/', $user->avatar));
+                    }
+                    $avatar = $request->file('avatar');
+                    $avatarName = time() . '_' . $avatar->getClientOriginalName();
+                    $avatar->storeAs('public/avatars', $avatarName);
+                    $user->avatar = 'storage/avatars/' . $avatarName;
+                }
+
+                $user->update($request->all());
+                return response()->json(['message' => 'Updated user successfully'], 200);
+            } catch (\Exception $e) {
+                return response()->json(['message' => 'error', 'error' => $e->getMessage()], 500);
+            }
+            
         }
-    }
     /**
      * Remove the specified resource from storage.
      */
