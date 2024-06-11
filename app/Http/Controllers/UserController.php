@@ -85,6 +85,7 @@ class UserController extends Controller
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 400);
         }
+
         $dataInsert = $validator->validated();
         try {
             $insertUser = User::create($dataInsert);
@@ -167,36 +168,32 @@ class UserController extends Controller
     public function update(Request $request, string $id)
     {
         try {
-            $inputs = $request->all();
-            $validate = Validator::make($inputs, [
+
+            $validate = Validator::make($request->all(), [
                 'name' => 'required|string',
                 'email' => 'required|string',
                 'phone' => 'required|string',
-                'avatar' => 'required|image|max:2048', // thêm validation cho ảnh avatar
-                'update_by' => 'required|string'
+                'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+                // 'update_by' => 'required|string'
             ]);
-            // if ($validate->fails()) {
-            //     return response()->json(['error' => $validate->errors()], 404);
-            // }
-
-            $user = User::findOrFail($id);
-
-            // xử lý upload ảnh avatar
-            if ($request->hasFile('avatar')) {
-                $avatar = $request->file('avatar');
-                $avatarName = time() . '.' . $avatar->getClientOriginalExtension();
-                $avatar->move(public_path('uploads/avatars'), $avatarName);
-                $inputs['avatar'] = 'uploads/avatars/' . $avatarName;
-                // return response()->json(['data' => $user], 200);
+            if ($validate->fails()) {
+                return response()->json(['error' => $validate->errors()], 400);
             }
 
-            $user->update($inputs);
-            return response()->json(['data' => $user], 200);
+            $user = User::findOrFail($id);
+            $user->update($request->all());
+            if ($request->hasFile('avatar')) {
+                // Store the file in the public/storage/avatar directory
+                $avatarPath = $request->file('avatar')->store('avatar', 'public');
+                $data['avatar'] = 'storage/' . $avatarPath;
+            }
+
+            $user->update($data);
+            return response()->json(['message' => 'Updated user successfully', 'user' => $user], 200);
         } catch (\Exception $e) {
             return response()->json(['message' => 'error', 'error' => $e->getMessage()], 500);
         }
     }
-
 
     /**
      * Remove the specified resource from storage.
