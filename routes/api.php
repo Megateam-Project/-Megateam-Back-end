@@ -1,6 +1,7 @@
 <?php
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BillController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
@@ -30,6 +31,7 @@ Route::resource('rooms', RoomController::class);
 Route::resource('users', UserController::class);
 Route::resource('feedbacks', FeedbackController::class);
 Route::resource('payments', PaymentController::class);
+Route::resource('bills', BillController::class);
 Route::namespace('api')->group(function(){
     Route::post('login', [AuthController::class,'login']);
     Route::post('signup', [AuthController::class,'signup']);
@@ -38,5 +40,5 @@ Route::namespace('api')->group(function(){
 });
 // routes/api.php
 Route::get('/user/{userId}/favorite-rooms', [FavoriteController::class, 'getFavoriteRooms']);
-
+Route::post('/user/payment', [PaymentController::class, 'makePayment']);
 

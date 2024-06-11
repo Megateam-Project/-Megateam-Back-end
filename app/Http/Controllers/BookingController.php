@@ -92,7 +92,7 @@ class BookingController extends Controller
             $insertBooking = Booking::create($dataInsert);
             return response()->json([
                 'message' => 'success',
-                'data' => $insertBooking
+                'idBooking' => $insertBooking->id,
             ], 200);
         } catch (\Exception $e) {
             return response()->json(['message' => 'error', 'error' => $e->getMessage()], 500);
