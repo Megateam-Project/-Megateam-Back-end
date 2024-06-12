@@ -170,8 +170,10 @@ $validate = Validator::make($request->all(),[
                 'name' => 'required|string',
                 'email' => 'required|string',
                 'phone' => 'required|string',
-                'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-                // 'update_by' => 'required|string'
+                'avatar' =>'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', 
+                'update_by' => 'required|string'
+
+
             ]);
             if($validate->fails()){
                 return response()->json(['error'=>$validate->errors()],400);
