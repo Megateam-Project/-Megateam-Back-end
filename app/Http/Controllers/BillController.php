@@ -13,7 +13,8 @@ class BillController extends Controller
      */
     public function index()
     {
-        //
+        $listBill = Bill::all();
+        return response()->json($listBill);
     }
    /**
      * Show the form for creating a new resource.
