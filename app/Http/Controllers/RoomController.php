@@ -315,38 +315,33 @@ public function show($id)
     }
 
     public function search(Request $request)
-{
-    $searchTerm = $request->input('searchTerm');
-    $searchTerm = '%' . $searchTerm . '%';
-    $checkInDate = $request->input('check_in_date');
-    $checkOutDate = $request->input('check_out_date');
-
-    $rooms = Room::where('type', 'LIKE', $searchTerm)
-                 ->whereDoesntHave('booking', function ($query) use ($checkInDate, $checkOutDate) {
-                     $query->where(function ($q) use ($checkInDate, $checkOutDate) {
-                         $q->where('check_in_date', '>=', $checkInDate)
-                           ->where('check_out_date', '<=', $checkOutDate);
-                     });
-                 })
-                 ->get();
-
-    return response()->json([
-        'rooms' => $rooms->map(function ($room) {
-            return [
-                'id' => $room->id,
-                'name' => $room->name,
-                'type' => $room->type,
-                'description' => $room->description,
-                'price' => $room->price,
-                'image' => $room->image,
-                'convenient' => $room->convenient,
-                'number' => $room->number,
-                'discount' => $room->discount,
-                'deleted_at' => $room->deleted_at,
-                'check_in_date' => optional($room->booking->first())->check_in_date,
-                'check_out_date' => optional($room->booking->first())->check_out_date
-            ];
-        })
-    ], 200);
-}
+    {
+        $searchTerm = $request->input('searchTerm');
+        $searchTerm = '%' . $searchTerm . '%';
+    
+        // Query rooms that don't have any bookings
+        $rooms = Room::where('type', 'LIKE', $searchTerm)
+                     ->whereDoesntHave('booking')
+                     ->get();
+    
+        return response()->json([
+            'rooms' => $rooms->map(function ($room) {
+                return [
+                    'id' => $room->id,
+                    'name' => $room->name,
+                    'type' => $room->type,
+                    'description' => $room->description,
+                    'price' => $room->price,
+                    'image' => $room->image,
+                    'convenient' => $room->convenient,
+                    'number' => $room->number,
+                    'discount' => $room->discount,
+                    'deleted_at' => $room->deleted_at,
+                    'check_in_date' => null,
+                    'check_out_date' => null
+                ];
+            })
+        ], 200);
+    }
+    
 }
