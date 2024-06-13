@@ -23,6 +23,13 @@ class User extends Authenticatable implements JWTSubject
         'delete_by',
         // Add any other attributes you want to mass-assign here
     ];
+/**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = ['password'];
+
 
     public function favorite(){
         return $this->hasMany(Favorite::class);
