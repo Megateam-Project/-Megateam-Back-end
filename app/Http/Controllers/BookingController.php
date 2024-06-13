@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
+use App\Models\Room;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Repositories\BookingRepository;
@@ -42,6 +43,24 @@ class BookingController extends Controller
     /**
      * Show the form for creating a new resource.
      */
+    public function getBookingByID($userId)
+    {
+        // Retrieve bookings with associated user and room details
+        $bookingHistory = Booking::where('user_id', $userId)->with('user', 'room', 'payment')->get();
+    
+        // Map over the collection to extract the necessary booking details
+        $bookings = $bookingHistory->map(function ($item) {
+            return [
+                'id' => $item->id,
+                'check_in_date' => $item->check_in_date,
+                'check_out_date' => $item->check_out_date,
+                'user' => $item->user,
+                'room' => $item->room,
+                'payment' => $item ->payment_id,
+            ];
+        });
+        return response()->json($bookings);
+    }
     public function create()
     {
         //
@@ -90,9 +109,11 @@ class BookingController extends Controller
         $dataInsert = $validator->validated();
         try {
             $insertBooking = Booking::create($dataInsert);
+            $room = Room::find($dataInsert['room_id']);
             return response()->json([
                 'message' => 'success',
                 'idBooking' => $insertBooking->id,
+                'room' => $room,
             ], 200);
         } catch (\Exception $e) {
             return response()->json(['message' => 'error', 'error' => $e->getMessage()], 500);

@@ -43,7 +43,7 @@ class BillController extends Controller
             $insertBill = Bill::create($dataInsert);
             return response()->json([
                 'message' => 'success',
-                'data' => $insertBill
+                'idBill' => $insertBill->id,
             ], 200);
         } catch (\Exception $e) {
             return response()->json(['message' => 'error', 'error' => $e->getMessage()], 500);
@@ -55,7 +55,8 @@ class BillController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $bill = Bill::findOrFail($id);
+        return response()->json($bill);
     }
 
     /**

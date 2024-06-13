@@ -32,6 +32,7 @@ Route::resource('users', UserController::class);
 Route::resource('feedbacks', FeedbackController::class);
 Route::resource('payments', PaymentController::class);
 Route::resource('bills', BillController::class);
+Route::resource('favorites', FavoriteController::class);
 Route::namespace('api')->group(function(){
     Route::post('login', [AuthController::class,'login']);
     Route::post('signup', [AuthController::class,'signup']);
@@ -41,4 +42,4 @@ Route::namespace('api')->group(function(){
 // routes/api.php
 Route::get('/user/{userId}/favorite-rooms', [FavoriteController::class, 'getFavoriteRooms']);
 Route::post('/user/payment', [PaymentController::class, 'makePayment']);
-
+Route::get('/booking/{userId}/bookingHistory', [BookingController::class, 'getBookingByID']);
