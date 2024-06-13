@@ -1,8 +1,9 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
+use App\Models\Bill;
 use Illuminate\Http\Request;
 
 class BillController extends Controller
@@ -12,7 +13,8 @@ class BillController extends Controller
      */
     public function index()
     {
-        //
+        $listBill = Bill::all();
+        return response()->json($listBill);
     }
    /**
      * Show the form for creating a new resource.
@@ -27,7 +29,26 @@ class BillController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validate = [
+            'booking_id' => 'required|integer',
+            'total_price' => 'required|integer',
+            'date' => 'required|date',
+            'create_by' => 'required|string',
+        ];
+        $validator = Validator::make($request->all(), $validate);
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 400);
+        }
+        $dataInsert = $validator->validated();
+        try {
+            $insertBill = Bill::create($dataInsert);
+            return response()->json([
+                'message' => 'success',
+                'idBill' => $insertBill->id,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'error', 'error' => $e->getMessage()], 500);
+        }
     }
 
     /**
@@ -35,7 +56,8 @@ class BillController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $bill = Bill::findOrFail($id);
+        return response()->json($bill);
     }
 
     /**
