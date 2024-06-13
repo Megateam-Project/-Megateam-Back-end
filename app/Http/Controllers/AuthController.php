@@ -90,7 +90,7 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'email' => 'required|string',
+            'email' => 'required|string|email',
             'password' => 'required|string',
         ]);
 
@@ -101,19 +101,54 @@ class AuthController extends Controller
         $credentials = $request->only('email', 'password');
         if ($token = JWTAuth::attempt($credentials)) {
             $user = JWTAuth::user();
-            return response()->json([
-                'response' => 'success',
-                'result' => [
-                    'token' => $token,
-                    'user' => [
-                        'id' => $user->id,
-                        'email' => $user->email,
-                        'name' => $user->name,
-                        'avatar' => $user->avatar,
-                        'phone' => $user->phone,
+
+            // Check the role of the user
+            $role = $user->role; // Assuming there is a 'role' field in the user model
+
+            // Prepare the user data to be returned in the response
+            $userData = [
+                'id' => $user->id,
+                'email' => $user->email,
+                'name' => $user->name,
+                'avatar' => $user->avatar,
+                'phone' => $user->phone,
+                'role' => $user->role
+            ];
+
+            // Add additional data or structure the response based on the role
+            if ($role == 'admin') {
+                $response = [
+                    'response' => 'success',
+                    'role' => 'admin',
+                    'result' => [
+                        'token' => $token,
+                        'user' => $userData,
+                        // Add more admin-specific data if needed
                     ],
-                ],
-            ]);
+                ];
+            } else if ($role == 'user') {
+                $response = [
+                    'response' => 'success',
+                    'role' => 'user',
+                    'result' => [
+                        'token' => $token,
+                        'user' => $userData,
+                        // Add more user-specific data if needed
+                    ],
+                ];
+            } else {
+                $response = [
+                    'response' => 'success',
+                    'role' => 'unknown',
+                    'result' => [
+                        'token' => $token,
+                        'user' => $userData,
+                        // Handle other roles if necessary
+                    ],
+                ];
+            }
+
+            return response()->json($response);
         }
 
         return response()->json([
@@ -123,22 +158,22 @@ class AuthController extends Controller
     }
 
     /**
- * @OA\POST(
- *     path="/api/logout",
- *     tags={"Authentication"},
- *     summary="Logout",
- *     description="Logout",
- *     @OA\RequestBody(
- *         required=true,
- *         @OA\JsonContent(
- *             @OA\Property(property="token", type="string", example="your_access_token_here")
- *         )
- *     ),
- *     @OA\Response(response=200, description="Logout"),
- *     @OA\Response(response=400, description="Bad request"),
- *     @OA\Response(response=404, description="Resource Not Found"),
- * )
- */
+     * @OA\POST(
+     *     path="/api/logout",
+     *     tags={"Authentication"},
+     *     summary="Logout",
+     *     description="Logout",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             @OA\Property(property="token", type="string", example="your_access_token_here")
+     *         )
+     *     ),
+     *     @OA\Response(response=200, description="Logout"),
+     *     @OA\Response(response=400, description="Bad request"),
+     *     @OA\Response(response=404, description="Resource Not Found"),
+     * )
+     */
 
     public function logout()
     {

@@ -172,12 +172,14 @@ class UserController extends Controller
                 'name' => 'required|string',
                 'email' => 'required|string',
                 'phone' => 'required|string',
-                'avatar' => 'required|max:2048',
+                'avatar' =>'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', 
+                // 'update_by' => 'required|string'
+
             ]);
 
-            // if ($validate->fails()) {
-            //     return response()->json(['error' => $validate->errors()], 400);
-            // }
+            if ($validate->fails()) {
+                return response()->json(['error' => $validate->errors()], 400);
+            }
 
             $user = User::findOrFail($id);
 
