@@ -84,7 +84,7 @@ class UserController extends Controller
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 400);
         }
-        $dataInsert = $validator->validated();
+$dataInsert = $validator->validated();
         try {
             $insertUser = User::create($dataInsert);
             return response()->json([
@@ -166,24 +166,33 @@ class UserController extends Controller
     public function update(Request $request, string $id)
     {
         try {
-            $validate = Validator::make($request->all(),[
+$validate = Validator::make($request->all(),[
                 'name' => 'required|string',
                 'email' => 'required|string',
                 'phone' => 'required|string',
-                // 'avatar' => 'required|string',
-                // 'update_by' => 'required|string'
+                'avatar' =>'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', 
+                'update_by' => 'required|string'
+
+
             ]);
             if($validate->fails()){
-                return response()->json(['error'=>$validate->errors()],404);
+                return response()->json(['error'=>$validate->errors()],400);
             }
 
             $user = User::findOrFail($id);
             $user->update($request->all());
-            return response()->json(['message' => 'Updated user successfully'], 200);
-        } catch (\Exception $e) {
-            return response()->json(['message' => 'error', 'error' => $e->getMessage()], 500);
+            if ($request->hasFile('avatar')) {
+            // Store the file in the public/storage/avatar directory
+            $avatarPath = $request->file('avatar')->store('avatar', 'public');
+            $data['avatar'] = 'storage/' . $avatarPath;
         }
+
+        $user->update($data);
+        return response()->json(['message' => 'Updated user successfully', 'user' => $user], 200);
+    } catch (\Exception $e) {
+        return response()->json(['message' => 'error', 'error' => $e->getMessage()], 500);
     }
+}
     /**
      * Remove the specified resource from storage.
      */

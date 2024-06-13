@@ -10,5 +10,13 @@ class Bill extends Model
 {
     use HasFactory, SoftDeletes;
     protected $table = 'bills';
-    
+    public $fillable = [
+        'booking_id',
+        'total_price',
+        'date',
+        'create_by',
+        'update_by',
+        'delete_at',
+        'delete_by',
+    ];
 }
